@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>MovementOSC</title>
+    <link href="styles.css" rel="stylesheet" />
+    <script src="../../node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js"></script>
+    <script src="../../node_modules/@tensorflow/tfjs-converter/dist/tf-converter.min.js"></script>
+    <script src="../../node_modules/@tensorflow/tfjs-backend-webgpu/dist/tf-backend-webgpu.min.js"></script>
+    <script src="../../node_modules/@tensorflow-models/pose-detection/dist/pose-detection.min.js"></script>
+
+    <script type="module" src="ema.js"></script>
+    <script type="module" src="detect.js"></script>
+  </head>
+  <body>
+    <h1>MovementOSC</h1>
+    <p class="tagline">by Kinetic Light and Lichen Community Systems</p>
+    <div class="controls">
+      <p class="model-controls">
+          <select id="deviceSelector"></select>
+          <select id="modelSelector"></select>
+          Minimum Score: <input type="text" value="0.25" id="score" />
+      </p>
+      <p class="connection-info">
+          <input type="text" value="127.0.0.1" id="ip" />:
+          <input type="text" value="7500" id="port" />
+      </p>
+      <canvas id="points"></canvas>
+      <video id="camera" width="640"></video>
+      <p><span id="poses">0</span> <span id="posesString">people</span> detected at <span id="fps">0</span> fps.</p>
+      <p></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+html {
+    background-color: black;
+    color: white;
+    font-family: sans-serif;
+    margin-left: 2.5%;
+    margin-top: 2%;
+}
+
+h1 {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 3rem;
+}
+
+.tagline {
+    font-size: 0.75rem;
+    padding-top: 0;
+    margin-top: 0.1rem;
+    font-style: italic;
+    padding-bottom: 1rem;
+}
+
+.model-controls {
+    padding-bottom: 0;
+    margin-bottom: 0.3rem;
+}
+
+.connection-info {
+    padding-top: 0;
+    margin-top: 0.2rem;
+}
+
+#score {
+    width: 3em;
+}
+
+#port {
+    width: 4em;
+}
+
+video {
+    visibility: hidden;
+}
