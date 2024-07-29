@@ -7,6 +7,12 @@ let udpPort = new osc.UDPPort({
     metadata: true
 });
 
+// TODO: Notify the renderer when an error occurs so that
+// something can be shown to the user.
+udpPort.on("error", (e) => {
+    console.log("Error sending OSC message. " + e);
+});
+
 udpPort.open();
 
 const createWindow = () => {
@@ -37,10 +43,13 @@ app.whenReady().then(() => {
             let pose = poses[i];
             let x = [];
             let y = [];
+            let z = [];
 
             let posePrefix = `/pose/${i}/`;
 
             pose.keypoints.forEach((keypoint) => {
+                // TODO: Only send keypoints with a score > the minimum.
+                // But what should be sent if the confidence is too low?
                 x.push({
                     type: "f",
                     value: keypoint.x
@@ -50,6 +59,13 @@ app.whenReady().then(() => {
                     type: "f",
                     value: keypoint.y
                 });
+
+                if (keypoint.z !== undefined) {
+                    z.push({
+                        type: "f",
+                        value: keypoint.z
+                    });
+                };
             });
 
             udpPort.send({
@@ -61,6 +77,13 @@ app.whenReady().then(() => {
                 address: posePrefix + "y",
                 args: y
             }, ip, port);
+
+            if (z.length > 0) {
+                udpPort.send({
+                    address: posePrefix + "z",
+                    args: z
+                }, ip, port);
+            }
         }
     });
 });

@@ -1,20 +1,15 @@
+import {models} from "./models.js";
+
 export class PoseDetector {
     constructor() {
         this.detector = undefined;
-        this.modelType = poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING;
-        this.modelUrl = "models/movenet-tfjs-multipose-lightning-v1/model.json";
+        this.model = models[0].model;
+        this.config = models[0].config;
     }
 
     async update() {
-        this.detector = await poseDetection.createDetector(
-            poseDetection.SupportedModels.MoveNet, {
-                modelType: this.modelType,
-                modelUrl: this.modelUrl,
-                enableSmoothing: true,
-                enableTracking: true,
-                trackerType: poseDetection.TrackerType.BoundingBox
-            }
-        );
+        this.detector = await poseDetection.createDetector(this.model,
+            this.config);
     }
 
     async ready() {

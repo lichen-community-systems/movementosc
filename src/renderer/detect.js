@@ -9,12 +9,15 @@ import { TextField } from "./text-field.js";
 import { NumberField } from "./number-field.js";
 
 let modelSelector = new ModelSelector(document.getElementById("modelSelector"));
-modelSelector.select.bind((id) => {
+async function selectModel(id) {
     modelSelector.selectedModel = modelSelector.options[id];
-    poseDetector.modelType = modelSelector.selectedModel.modelType;
-    poseDetector.modelUrl = modelSelector.selectedModel.modelUrl;
-    poseDetector.update();
-});
+    poseDetector.model = modelSelector.selectedModel.model;
+    poseDetector.config = modelSelector.selectedModel.config;
+
+    await poseDetector.update();
+}
+
+modelSelector.select.bind(selectModel);
 await modelSelector.update();
 
 let poseDetector = new PoseDetector();
@@ -25,10 +28,11 @@ let deviceSelector = new DeviceSelector(
 await deviceSelector.update();
 
 let cameraVideo = new CameraVideo(document.getElementById("camera"));
-deviceSelector.select.bind((id) => {
+async function selectDevice(id) {
     cameraVideo.id = id;
-    cameraVideo.update();
-});
+    await cameraVideo.update();
+}
+deviceSelector.select.bind(selectDevice);
 await cameraVideo.ready();
 
 let videoPoseRenderer = new VideoPoseRenderer(
