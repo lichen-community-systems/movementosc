@@ -33,6 +33,7 @@
         "package-mac-arm": "node_modules/.bin/electron-packager ./ --platform=darwin --arch=arm64 --out=./dist --overwrite",
         "package-win-x64": "node_modules/.bin/electron-packager ./ --platform=win32 --arch=x64 --out=./dist --overwrite",
         "package-linux-x64": "node_modules/.bin/electron-packager ./ --platform=linux --arch=x64 --out=./dist --overwrite",
-        "package-all": "npm run package-mac-arm && npm run package-mac-intel && npm run package-win-x64 && npm run package-linux-x64"
+        "package-all": "rm -rf dist/* && npm run package-mac-arm && npm run package-mac-intel && npm run package-win-x64 && npm run package-linux-x64",
+        "create-release-artifacts": "npm run package-all && zip -r dist/MovementOSC-darwin-x64.zip dist/MovementOSC-darwin-x64 && zip -r dist/ovementOSC-darwin-arm64.zip dist/MovementOSC-darwin-arm64  && zip -r dist/MovementOSC-win32-x64.zip dist/MovementOSC-win32-x64 -x '*.DS_Store' -x '__MACOSX' && zip -r dist/MovementOSC-linux-x64.zip dist/MovementOSC-linux-x64 -x '*.DS_Store' -x '__MACOSX'"
     }
 }
