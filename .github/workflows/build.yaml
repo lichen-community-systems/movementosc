@@ -1,0 +1,26 @@
+name: build-and-package
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Builld Electron app
+        run: |
+          npm install
+
+  package:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Package Electron app
+        run: |
+          npm install
+          npm run package-all
