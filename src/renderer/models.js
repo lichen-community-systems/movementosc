@@ -37,7 +37,7 @@ export const models = {
         model: poseDetection.SupportedModels.BlazePose,
         config: {
             modelType: "heavy",
-            modelUrl: "/models/blazepose-3d-tfjs-landmark-heavy-v2",
+            modelUrl: "models/blazepose-3d-tfjs-landmark-heavy-v2",
             runtime: "mediapipe",
             solutionPath: "../../node_modules/@mediapipe/pose"
         }
@@ -48,7 +48,7 @@ export const models = {
         model: poseDetection.SupportedModels.BlazePose,
         config: {
             modelType: "full",
-            modelUrl: "/models/blazepose-3d-tfjs-landmark-full-v2",
+            modelUrl: "models/blazepose-3d-tfjs-landmark-full-v2",
             runtime: "mediapipe",
             solutionPath: "../../node_modules/@mediapipe/pose"
         }
