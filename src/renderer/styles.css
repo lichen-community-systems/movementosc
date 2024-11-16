@@ -42,3 +42,7 @@ h1 {
 video {
     visibility: hidden;
 }
+
+canvas {
+    width: 100%;
+}

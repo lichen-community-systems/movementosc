@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const osc = require("osc");
 
 let udpPort = new osc.UDPPort({localPort: 7500});

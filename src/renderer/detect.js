@@ -8,6 +8,8 @@ import { VideoPoseRenderer } from "./video-pose-renderer.js";
 import { TextField } from "./text-field.js";
 import { NumberField } from "./number-field.js";
 
+let videoPoseRenderer;
+
 let modelSelector = new ModelSelector(document.getElementById("modelSelector"));
 async function selectModel(id) {
     modelSelector.selectedModel = modelSelector.options[id];
@@ -31,11 +33,12 @@ let cameraVideo = new CameraVideo(document.getElementById("camera"));
 async function selectDevice(id) {
     cameraVideo.id = id;
     await cameraVideo.update();
+    videoPoseRenderer.update();
 }
 deviceSelector.select.bind(selectDevice);
 await cameraVideo.ready();
 
-let videoPoseRenderer = new VideoPoseRenderer(
+videoPoseRenderer = new VideoPoseRenderer(
     document.getElementById("points"), cameraVideo.container);
 let fpsDisplay = new FPSDisplay(document.getElementById("fps"), 2.5);
 let poseInfoRenderer = new PoseInfoRenderer();

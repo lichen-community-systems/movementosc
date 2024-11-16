@@ -26,10 +26,11 @@
           <input type="text" value="127.0.0.1" id="ip" />:
           <input type="text" value="7500" id="port" />
       </p>
-      <canvas id="points"></canvas>
-      <video id="camera" width="640"></video>
-      <p><span id="poses">0</span> <span id="posesString">people</span> detected at <span id="fps">0</span> fps.</p>
-      <p></p>
+      <div id="video-area">
+        <p><span id="poses">0</span> <span id="posesString">people</span> detected at <span id="fps">0</span> fps.</p>
+        <canvas id="points"></canvas>
+        <video id="camera"></video>
+      </div>
     </div>
   </body>
 </html>

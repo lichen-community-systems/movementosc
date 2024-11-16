@@ -6,13 +6,13 @@ export class VideoPoseRenderer {
         this.pointColor = "yellow";
         this.outlineColor = "white";
         this.pointSize = 7;
-        this.h = this.video.offsetHeight;
-        this.w = this.video.offsetWidth;
         this.ctx = this.container.getContext("2d");
-        this.setup();
+        this.update();
     }
 
-    setup() {
+    update() {
+        this.h = this.video.offsetHeight;
+        this.w = this.video.offsetWidth;
         this.container.setAttribute("height", this.h);
         this.container.setAttribute("width", this.w);
         this.ctx.fillStyle = this.pointColor;
