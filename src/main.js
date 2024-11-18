@@ -40,7 +40,7 @@ app.whenReady().then(() => {
         }
     });
 
-    ipcMain.handle("send", async (event, poses, minimumScore, ip, port) => {
+    ipcMain.handle("send", async (event, poses, ip, port) => {
         for (let i = 0; i < poses.length; i++) {
             let pose = poses[i];
             let x = [];
@@ -50,30 +50,19 @@ app.whenReady().then(() => {
             let posePrefix = `/pose/${i}/`;
 
             pose.keypoints.forEach((keypoint) => {
-                let xVal = keypoint.x;
-                let yVal = keypoint.y;
-                let zVal = keypoint.z !== undefined ?
-                    keypoint.z : NOT_RECOGNIZED; // Not all models provide z.
-
-                if (keypoint.score < minimumScore) {
-                    xVal = NOT_RECOGNIZED;
-                    yVal = NOT_RECOGNIZED;
-                    zVal = NOT_RECOGNIZED;
-                }
-
                 x.push({
                     type: "f",
-                    value: xVal
+                    value: keypoint.x
                 });
 
                 y.push({
                     type: "f",
-                    value: yVal
+                    value: keypoint.y
                 });
 
                 z.push({
                     type: "f",
-                    value: zVal
+                    value: keypoint.z
                 });
             });
 

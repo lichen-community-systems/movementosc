@@ -1,8 +1,7 @@
 export class VideoPoseRenderer {
-    constructor(container, video, minimumScore) {
+    constructor(container, video) {
         this.container = container;
         this.video = video;
-        this.minimumScore = minimumScore;
         this.pointColor = "yellow";
         this.outlineColor = "white";
         this.pointSize = 7;
@@ -33,7 +32,7 @@ export class VideoPoseRenderer {
         this.ctx.strokeRect(boxX, boxY, boxW, boxH);
     }
 
-    render(poses) {
+    render(poses, minimumScore) {
         this.ctx.clearRect(0, 0, this.w, this.h);
         this.ctx.drawImage(this.video, 0, 0, this.w, this.h);
 
@@ -41,7 +40,7 @@ export class VideoPoseRenderer {
             this.drawBox(pose);
 
             for (let keypoint of pose.keypoints) {
-                if (keypoint.score > this.minimumScore) {
+                if (keypoint.score > minimumScore) {
                     this.ctx.fillRect(keypoint.x, keypoint.y,
                         7, 7);
                 }

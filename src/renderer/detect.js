@@ -7,6 +7,7 @@ import { CameraVideo } from "./camera-video.js";
 import { VideoPoseRenderer } from "./video-pose-renderer.js";
 import { TextField } from "./text-field.js";
 import { NumberField } from "./number-field.js";
+import { PoseTransformer } from "./pose-transformer.js";
 
 let videoPoseRenderer;
 
@@ -34,12 +35,14 @@ async function selectDevice(id) {
     cameraVideo.id = id;
     await cameraVideo.update();
     videoPoseRenderer.update();
+    poseTransformer.update();
 }
 deviceSelector.select.bind(selectDevice);
 await cameraVideo.ready();
 
 videoPoseRenderer = new VideoPoseRenderer(
     document.getElementById("points"), cameraVideo.container);
+let poseTransformer = new PoseTransformer(cameraVideo.container);
 let fpsDisplay = new FPSDisplay(document.getElementById("fps"), 2.5);
 let poseInfoRenderer = new PoseInfoRenderer();
 let minimumScoreField = new NumberField(document.getElementById("score"), 0.25);
@@ -48,12 +51,14 @@ let portField = new NumberField(document.getElementById("port"), 7500);
 
 async function detectPoses() {
     await cameraVideo.playable();
-    const poses = await poseDetector.detect(cameraVideo.container);
-    fpsDisplay.render();
+    let minimumScore = minimumScoreField.value;
+    let poses = await poseDetector.detect(cameraVideo.container);
     poseInfoRenderer.render(poses);
-    videoPoseRenderer.minimumScore = minimumScoreField.value;
-    videoPoseRenderer.render(poses);
-    osc.send(poses, minimumScoreField.value, ipField.value, portField.value);
+    videoPoseRenderer.render(poses, minimumScore);
+
+    let transformedPoses = poseTransformer.transform(poses, minimumScore);
+    fpsDisplay.render();
+    osc.send(transformedPoses, ipField.value, portField.value);
     requestAnimationFrame(detectPoses);
 }
 
