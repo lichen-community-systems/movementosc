@@ -53,7 +53,7 @@ async function detectPoses() {
     poseInfoRenderer.render(poses);
     videoPoseRenderer.minimumScore = minimumScoreField.value;
     videoPoseRenderer.render(poses);
-    osc.send(poses, ipField.value, portField.value);
+    osc.send(poses, minimumScoreField.value, ipField.value, portField.value);
     requestAnimationFrame(detectPoses);
 }
 

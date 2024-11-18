@@ -2,6 +2,8 @@ const {app, BrowserWindow, ipcMain} = require("electron");
 const path = require("node:path");
 const osc = require("osc");
 
+const NOT_RECOGNIZED = NaN;
+
 let udpPort = new osc.UDPPort({
     remotePort: 57122,
     metadata: true
@@ -38,7 +40,7 @@ app.whenReady().then(() => {
         }
     });
 
-    ipcMain.handle("send", async (event, poses, ip, port) => {
+    ipcMain.handle("send", async (event, poses, minimumScore, ip, port) => {
         for (let i = 0; i < poses.length; i++) {
             let pose = poses[i];
             let x = [];
@@ -48,24 +50,31 @@ app.whenReady().then(() => {
             let posePrefix = `/pose/${i}/`;
 
             pose.keypoints.forEach((keypoint) => {
-                // TODO: Only send keypoints with a score > the minimum.
-                // But what should be sent if the confidence is too low?
+                let xVal = keypoint.x;
+                let yVal = keypoint.y;
+                let zVal = keypoint.z !== undefined ?
+                    keypoint.z : NOT_RECOGNIZED; // Not all models provide z.
+
+                if (keypoint.score < minimumScore) {
+                    xVal = NOT_RECOGNIZED;
+                    yVal = NOT_RECOGNIZED;
+                    zVal = NOT_RECOGNIZED;
+                }
+
                 x.push({
                     type: "f",
-                    value: keypoint.x
+                    value: xVal
                 });
 
                 y.push({
                     type: "f",
-                    value: keypoint.y
+                    value: yVal
                 });
 
-                if (keypoint.z !== undefined) {
-                    z.push({
-                        type: "f",
-                        value: keypoint.z
-                    });
-                };
+                z.push({
+                    type: "f",
+                    value: zVal
+                });
             });
 
             udpPort.send({
@@ -78,12 +87,10 @@ app.whenReady().then(() => {
                 args: y
             }, ip, port);
 
-            if (z.length > 0) {
-                udpPort.send({
-                    address: posePrefix + "z",
-                    args: z
-                }, ip, port);
-            }
+            udpPort.send({
+                address: posePrefix + "z",
+                args: z
+            }, ip, port);
         }
     });
 });
