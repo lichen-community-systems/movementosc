@@ -23,4 +23,4 @@ jobs:
       - name: Package Electron app
         run: |
           npm install
-          npm run create-release-artifacts
+          npm run package-all

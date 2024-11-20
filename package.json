@@ -1,7 +1,7 @@
 {
     "name": "movement-osc",
     "productName": "MovementOSC",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "contributors": [
         {
             "name": "Kinetic Light",
@@ -28,13 +28,22 @@
         "electron": "33.2.0",
         "@electron/packager": "18.3.6"
     },
+    "config": {
+        "copyright": "Copyright 2024 Lichen Community Systems Worker Cooperative Canada and Kinetic Light",
+        "bundleId": "coop.lichen.MovementOSC",
+        "categoryType": "public.app-category.video"
+    },
     "scripts": {
         "start": "node_modules/.bin/electron .",
-        "package-mac-intel": "node_modules/.bin/electron-packager ./ --platform=darwin --arch=x64 --out=./dist --overwrite",
-        "package-mac-arm": "node_modules/.bin/electron-packager ./ --platform=darwin --arch=arm64 --out=./dist --overwrite",
-        "package-win-x64": "node_modules/.bin/electron-packager ./ --platform=win32 --arch=x64 --out=./dist --overwrite",
-        "package-linux-x64": "node_modules/.bin/electron-packager ./ --platform=linux --arch=x64 --out=./dist --overwrite",
-        "package-all": "rm -rf dist/* && npm run package-mac-arm && npm run package-mac-intel && npm run package-win-x64 && npm run package-linux-x64",
-        "create-release-artifacts": "npm run package-all && zip -r dist/MovementOSC-darwin-x64.zip dist/MovementOSC-darwin-x64 && zip -r dist/MovementOSC-darwin-arm64.zip dist/MovementOSC-darwin-arm64  && zip -r dist/MovementOSC-win32-x64.zip dist/MovementOSC-win32-x64 -x '*.DS_Store' -x '__MACOSX' && zip -r dist/MovementOSC-linux-x64.zip dist/MovementOSC-linux-x64 -x '*.DS_Store' -x '__MACOSX'"
+        "package-mac-intel": "node_modules/.bin/electron-packager ./ --platform=darwin --arch=x64 --out=./dist --overwrite --app-copyright=\"$npm_package_config_copyright\" --app-bundle-id=\"$npm_package_config_bundleID\" --app-category-type=\"$npm_package_config_categoryType\" --no-junk --osx-sign",
+        "package-mac-arm": "node_modules/.bin/electron-packager ./ --platform=darwin --arch=arm64 --out=./dist --overwrite --app-copyright=\"$npm_package_config_copyright\" --app-bundle-id=\"$npm_package_config_bundleID\" --app-category-type=\"$npm_package_config_categoryType\" --no-junk --osx-sign",
+        "package-win-x64": "node_modules/.bin/electron-packager ./ --platform=win32 --arch=x64 --out=./dist --overwrite --app-copyright=\"$npm_package_config_copyright\" --no-junk",
+        "package-linux-x64": "node_modules/.bin/electron-packager ./ --platform=linux --arch=x64 --out=./dist --overwrite --app-copyright=\"$npm_package_config_copyright\" --no-junk",
+        "package-all": "npm run package-mac-arm && npm run package-mac-intel && npm run package-win-x64 && npm run package-linux-x64",
+        "notarize-mac-arm": "build-scripts/notarize-macos.sh \"MovementOSC-darwin-arm64\" \"MovementOSC-macOS-arm.zip\"",
+        "notarize-mac-intel": "build-scripts/notarize-macos.sh \"MovementOSC-darwin-x64\" \"MovementOSC-macOS-intel.zip\"",
+        "notarize-mac-all": "npm run notarize-mac-arm && npm run notarize-mac-intel",
+        "prepare-release-artifacts": "build-scripts/prepare-release-artifacts.sh $npm_package_version",
+        "prepare-release": "npm run package-all && npm run notarize-mac-all && npm run prepare-release-artifacts"
     }
 }
