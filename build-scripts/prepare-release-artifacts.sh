@@ -3,6 +3,8 @@ mkdir -p dist/release
 
 zip -r dist/release/MovementOSC-$1-win32-x64.zip dist/MovementOSC-win32-x64 -x '*.DS_Store' -x '__MACOSX'
 
+zip -r dist/release/MovementOSC-$1-win32-arm64.zip dist/MovementOSC-win32-arm64 -x '*.DS_Store' -x '__MACOSX'
+
 zip -r dist/release/MovementOSC-$1-linux-x64.zip dist/MovementOSC-linux-x64 -x '*.DS_Store' -x '__MACOSX'
 
 mkdir -p dist/release/MovementOSC-$1-darwin-arm64/
