@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
 const path = require("node:path");
 const osc = require("osc");
+const OSCFormatSender = require("./main/osc-format-sender.js");
 
 const NOT_RECOGNIZED = NaN;
 
@@ -32,7 +33,10 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+    let format = "bundle";
+
     createWindow();
+    let formatSender = new OSCFormatSender(udpPort);
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -40,46 +44,16 @@ app.whenReady().then(() => {
         }
     });
 
+    ipcMain.handle("updateFormat", async (event, formatID) => {
+        format = formatID;
+    });
+
     ipcMain.handle("send", async (event, poses, ip, port) => {
-        for (let i = 0; i < poses.length; i++) {
-            let pose = poses[i];
-            let x = [];
-            let y = [];
-            let z = [];
-
-            let posePrefix = `/pose/${i}/`;
-
-            pose.keypoints.forEach((keypoint) => {
-                x.push({
-                    type: "f",
-                    value: keypoint.x
-                });
-
-                y.push({
-                    type: "f",
-                    value: keypoint.y
-                });
-
-                z.push({
-                    type: "f",
-                    value: keypoint.z
-                });
-            });
-
-            udpPort.send({
-                address: posePrefix + "x",
-                args: x
-            }, ip, port);
-
-            udpPort.send({
-                address: posePrefix + "y",
-                args: y
-            }, ip, port);
-
-            udpPort.send({
-                address: posePrefix + "z",
-                args: z
-            }, ip, port);
+        if (format === "carlos-friend") {
+            formatSender.sendCarlosFriendFormat(poses, ip,
+                port);
+        } else {
+            formatSender.sendBundleFormat(poses, ip, port);
         }
     });
 });

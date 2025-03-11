@@ -7,6 +7,7 @@ import { CameraVideo } from "./camera-video.js";
 import { VideoPoseRenderer } from "./video-pose-renderer.js";
 import { TextField } from "./text-field.js";
 import { NumberField } from "./number-field.js";
+import { FormatSelector } from "./format-selector.js";
 import { PoseTransformer } from "./pose-transformer.js";
 
 let videoPoseRenderer;
@@ -48,6 +49,7 @@ let poseInfoRenderer = new PoseInfoRenderer();
 let minimumScoreField = new NumberField(document.getElementById("score"), 0.25);
 let ipField = new TextField(document.getElementById("ip"), "127.0.0.1");
 let portField = new NumberField(document.getElementById("port"), 7500);
+let formatSelector = new FormatSelector(document.getElementById("formatSelector"), osc);
 
 async function detectPoses() {
     await cameraVideo.playable();
