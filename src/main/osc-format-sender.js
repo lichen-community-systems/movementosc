@@ -31,7 +31,7 @@ class OSCFormatSender {
      * @param {*} ip the IP address to the the OSC bundle to
      * @param {*} port the port to send the OSC bundle on
      */
-    sendCarlosFriendFormat(poses, ip, port) {
+    sendMessagePerAxisFormat(poses, ip, port) {
         for (let i = 0; i < poses.length; i++) {
             let pose = poses[i];
             let x = [];

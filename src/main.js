@@ -49,8 +49,8 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle("send", async (event, poses, ip, port) => {
-        if (format === "carlos-friend") {
-            formatSender.sendCarlosFriendFormat(poses, ip,
+        if (format === "message-per-axis") {
+            formatSender.sendMessagePerAxisFormat(poses, ip,
                 port);
         } else {
             formatSender.sendBundleFormat(poses, ip, port);

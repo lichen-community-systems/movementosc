@@ -3,11 +3,11 @@ import { Select } from "./select.js";
 const OSC_FORMATS = [
     {
         id: "bundle",
-        label: "Bundle Format"
+        label: "Atomic Bundle Format"
     },
     {
-        id: "carlos-friend",
-        label: "Carlos' Friend's Format"
+        id: "message-per-axis",
+        label: "Message Per Axis"
     }
 ];
 
