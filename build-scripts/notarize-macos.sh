@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# https://developer.apple.com/documentation/security/customizing-the-notarization-workflow
+
+if [ -z "$APPLE_NOTARIZATION_KEYCHAIN_PROFILE" ]; then
+    echo "Error: APPLE_NOTARIZATION_KEYCHAIN_PROFILE environment variable is not set. Please set it to the Keychain notary tool password name."
+    exit 1
+fi
+
 mkdir -p dist/notarization
 
 # Zip up the application for the notarization server.
