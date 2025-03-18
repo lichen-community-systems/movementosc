@@ -146,7 +146,7 @@ class OSCFormatSender {
         };
 
         for (let i = 0; i < poses.length; i++) {
-            let posePrefix = `/pose/${i}/`;
+            let posePrefix = `/pose/${i}`;
             let pose = poses[i];
             let oscPose = {
                 address: posePrefix,
