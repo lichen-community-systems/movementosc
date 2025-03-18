@@ -74,10 +74,6 @@ class OSCFormatSender {
         }
     }
 
-    sendBundledMessagePerAxisFormat(poses, ip, port) {
-
-    }
-
     /**
      * Sends pose data as an OSC bundle containing message packets
      * for each pose. Keypoints are represented as 33 arrays containing

@@ -6,6 +6,7 @@ const OSCFormatSender = require("./main/osc-format-sender.js");
 const NOT_RECOGNIZED = NaN;
 
 let udpPort = new osc.UDPPort({
+    localAddress: "0.0.0.0",
     remotePort: 57122,
     metadata: true
 });
