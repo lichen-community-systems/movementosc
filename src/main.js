@@ -34,7 +34,7 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
-    let format = "bundle";
+    let format = "bundled-message-per-axis";
 
     createWindow();
     let formatSender = new OSCFormatSender(udpPort);
@@ -50,11 +50,12 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle("send", async (event, poses, ip, port) => {
-        if (format === "message-per-axis") {
-            formatSender.sendMessagePerAxisFormat(poses, ip,
-                port);
+        if (format === "bundled-message-per-axis") {
+            formatSender.sendBundledMessagePerAxisFormat(poses, ip, port);
+        } else if (format === "message-per-axis") {
+            formatSender.sendMessagePerAxisFormat(poses, ip, port);
         } else {
-            formatSender.sendBundleFormat(poses, ip, port);
+            formatSender.sendBundleArrayFormat(poses, ip, port);
         }
     });
 });

@@ -2,13 +2,17 @@ import { Select } from "./select.js";
 
 const OSC_FORMATS = [
     {
-        id: "bundle",
-        label: "Atomic Bundle Format"
+        id: "bundled-message-per-axis",
+        label: "Bundled Message Per Axis"
     },
     {
         id: "message-per-axis",
         label: "Message Per Axis"
-    }
+    },
+    {
+        id: "bundled-xyz-array",
+        label: "Bundled xyz Array"
+    },
 ];
 
 export class FormatSelector {
@@ -16,7 +20,7 @@ export class FormatSelector {
         if (!container) {
             console.error("FormatSelector: No container was specified.");
         }
-        this.select = new Select(container, [], "sendBundleFormat");
+        this.select = new Select(container, [], "bundled-message-per-axis");
         this.formats = [...OSC_FORMATS];
         this.container = container;
 

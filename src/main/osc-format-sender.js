@@ -5,6 +5,53 @@ class OSCFormatSender {
         this.udpPort = udpPort;
     }
 
+    generateAxisMessages(poses) {
+        let axisMessages = [];
+
+        for (let i = 0; i < poses.length; i++) {
+            let pose = poses[i];
+            let x = [];
+            let y = [];
+            let z = [];
+
+            let posePrefix = `/pose/${i}/`;
+
+            pose.keypoints.forEach((keypoint) => {
+                x.push({
+                    type: "f",
+                    value: keypoint.x
+                });
+
+                y.push({
+                    type: "f",
+                    value: keypoint.y
+                });
+
+                z.push({
+                    type: "f",
+                    value: keypoint.z
+                });
+            });
+
+            axisMessages.push({
+                address: posePrefix + "x",
+                args: x
+            });
+
+            axisMessages.push({
+                address: posePrefix + "y",
+                args: y
+            });
+
+            axisMessages.push({
+                address: posePrefix + "z",
+                args: z
+            });
+        }
+
+        return axisMessages;
+    }
+
     /**
      * Sends pose data as separate messages for each pose and keypoint axis.
      * A given OSC message will contain all 33 keypoints for a single axis of
@@ -32,46 +79,52 @@ class OSCFormatSender {
      * @param {*} port the port to send the OSC bundle on
      */
     sendMessagePerAxisFormat(poses, ip, port) {
-        for (let i = 0; i < poses.length; i++) {
-            let pose = poses[i];
-            let x = [];
-            let y = [];
-            let z = [];
+        let axisMessages = this.generateAxisMessages(poses);
 
-            let posePrefix = `/pose/${i}/`;
-
-            pose.keypoints.forEach((keypoint) => {
-                x.push({
-                    type: "f",
-                    value: keypoint.x
-                });
-
-                y.push({
-                    type: "f",
-                    value: keypoint.y
-                });
-
-                z.push({
-                    type: "f",
-                    value: keypoint.z
-                });
-            });
-
-            this.udpPort.send({
-                address: posePrefix + "x",
-                args: x
-            }, ip, port);
-
-            this.udpPort.send({
-                address: posePrefix + "y",
-                args: y
-            }, ip, port);
-
-            this.udpPort.send({
-                address: posePrefix + "z",
-                args: z
-            }, ip, port);
+        for (let i = 0; i < axisMessages.length; i++) {
+            let axisMessage = axisMessages[i]
+            this.udpPort.send(axisMessage, ip, port)
         }
+    }
+
+    /**
+     * Sends pose data as a bundle containing separate messages for
+     * each pose and keypoint axis.
+     * A given OSC message will contain all 33 keypoints for a
+     * single axis of a single pose.
+     *
+     * Unrecognized keypoints will be supplied as NaN.
+     *
+     * {
+     *   timeTag: osc.timeTag(0),
+     *   packets: [
+     *     {
+     *       address: "/poses/0/x",
+     *       args: [0.0, 0.1, ..., 0.5]
+     *     },
+     *     {
+     *       address: "/poses/0/y",
+     *       args: [0.1, 0.22, ..., 0.25]
+     *     },
+     *     {
+     *       address: "/poses/0/z",
+     *       args: [0.5, 0.48, ..., 0.2]
+     *     }
+     *   ]
+     * }
+     *
+     * @param {*} poses the pose data in "native" format sent from the renderer
+     * @param {*} ip the IP address to the the OSC bundle to
+     * @param {*} port the port to send the OSC bundle on
+     */
+    sendBundledMessagePerAxisFormat(poses, ip, port) {
+        let axisMessages = this.generateAxisMessages(poses);
+        let bundle = {
+            timeTag: osc.timeTag(0),
+            packets: axisMessages
+        };
+
+        this.udpPort.send(bundle, ip, port);
     }
 
     /**
@@ -139,7 +192,7 @@ class OSCFormatSender {
      * @param {*} ip the IP address to the the OSC bundle to
      * @param {*} port the port to send the OSC bundle on
      */
-    sendBundleFormat(poses, ip, port) {
+    sendBundleArrayFormat(poses, ip, port) {
         let oscPoseBundle = {
             timeTag: osc.timeTag(0),
             packets: []
